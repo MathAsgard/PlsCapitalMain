@@ -306,15 +306,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/cryptomischief2",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/CryptoMischief?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@CryptoMischief",
       },
     ],
   },
@@ -324,15 +324,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/StunnaBreezy",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/stunnabreezy3?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@stunnabreezy3",
       },
     ],
   },
@@ -342,15 +342,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/MoCryptoChat_777",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/CryptoMo_777?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@mocrypto777",
       },
     ],
   },
@@ -360,15 +360,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/ExperienceCrypto247_DailyUpdates",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/XPCrypto247?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@EXPERIENCECRYPTO247",
       },
     ],
   },
@@ -378,15 +378,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/teamsti_chat",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/scott_capital?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@ScottTheInvestor",
       },
     ],
   },
@@ -396,15 +396,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/jaimesorianocrypto",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/PulseCapitalFi",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@bestpassiveincomeprogramso6200",
       },
     ],
   },
@@ -414,15 +414,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/passiveincomeplays",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/PRIDE2120?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@cryptopride01",
       },
     ],
   },
@@ -432,15 +432,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/MillionzTG",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/TrueMillionz?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@Dripmillionz",
       },
     ],
   },
@@ -450,15 +450,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/Legacy7Crypto",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/Legacy7crypto?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@legacy7crypto",
       },
     ],
   },
@@ -468,33 +468,51 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/CryptoNeptune8",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/cryptoneptune_?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@Cryptoneptune",
       },
     ],
   },
   {
-    img: "/img/ambassadors/11.png",
+    img: "/img/ambassadors/14.png",
+    name: "Rekt 2 Riches",
+    social: [
+      {
+        icon: telegram,
+        link: "https://linktr.ee/rekt2richez",
+      },
+      {
+        icon: twitter,
+        link: "https://x.com/REKT2RICHEZLIFE",
+      },
+      {
+        icon: youtube,
+        link: "https://www.youtube.com/@R2R-REKT2RICHES",
+      },
+    ],
+  },
+  {
+	  img: "/img/ambassadors/11.png",
     name: "Drip to Wealth",
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/KryptoKnight72",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/DripToWealth?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@DRIPToWealth",
       },
     ],
   },
@@ -504,15 +522,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/TheWarriorsOfficial",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/thewarriors_dao?s=21",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@WarriorsDAO",
       },
     ],
   },
