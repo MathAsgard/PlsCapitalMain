@@ -288,15 +288,15 @@ const data = [
     social: [
       {
         icon: telegram,
-        link: "",
+        link: "https://t.me/+ihhER-Ngxyc3YjEx",
       },
       {
         icon: twitter,
-        link: "",
+        link: "https://x.com/moonshotmax?s=09",
       },
       {
         icon: youtube,
-        link: "",
+        link: "https://www.youtube.com/@moonshotmax3841",
       },
     ],
   },
