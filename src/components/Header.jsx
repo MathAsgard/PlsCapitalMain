@@ -758,7 +758,7 @@ const menu = [
     ],
   },
   {
-    name: "Stock",
+    name: "Tools",
     url: "#",
     submenu: [
       {
