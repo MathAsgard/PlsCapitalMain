@@ -16,7 +16,7 @@ const PageHeader = ({ title, subtitle, text, miniFav, ...rest}) => {
 						<div className="text-center">
 							<div className="mb-4">
 								<PresaleCountdown
-									targetDate={`June 30, 2025 00:00:00`}
+									targetDate={`October 5, 2024 00:00:00`}
 								/>
 							</div>
 							<h1 className="text-2xl md:text-3xl lg:text-[40px] font-semibold">
