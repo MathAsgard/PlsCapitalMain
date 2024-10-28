@@ -134,7 +134,7 @@ const AmbassadorSection = ({ ...rest }) => {
                     Join Team - {activeName}
                   </div>
                   <div className="font-normal text-sm">
-                    Join Pulse Capital Presale on Team Stunna
+                    Join Pulse Capital Presale on {activeName}
                   </div>
                 </div>
                 <button type="button" onClick={() => setZappedModal(false)}>
