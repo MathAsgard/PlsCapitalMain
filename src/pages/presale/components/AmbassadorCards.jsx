@@ -77,6 +77,13 @@ const data = [
 		muted: true,
 	},
 	{
+		title: "Hard Cap",
+		amount: "$500,000",
+		subtitle: "Max Raise",
+		img: "/img/ambassador-card-bg-1.png",
+		muted: true,
+	},
+	{
 		title: "My Contribution",
 		amount: "5000",
 		dai: "DAI",
