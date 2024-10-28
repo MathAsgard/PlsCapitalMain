@@ -71,15 +71,8 @@ const AmbassadorCards = ({...rest}) => {
 const data = [
 	{
 		title: "Soft Cap",
-		amount: "$200,000",
+		amount: "$150,000",
 		subtitle: "Target Raise",
-		img: "/img/ambassador-card-bg-1.png",
-		muted: true,
-	},
-	{
-		title: "Hard Cap",
-		amount: "$500,000",
-		subtitle: "Max Raise",
 		img: "/img/ambassador-card-bg-1.png",
 		muted: true,
 	},
