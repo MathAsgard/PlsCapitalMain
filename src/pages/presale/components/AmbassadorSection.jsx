@@ -355,20 +355,20 @@ const data = [
     ],
   },
   {
-    img: "/img/ambassadors/5.png",
-    name: "Experience Crypto 24/7",
+    img: "/img/ambassadors/14.png",
+    name: "Rekt 2 Riches",
     social: [
       {
         icon: telegram,
-        link: "https://t.me/ExperienceCrypto247_DailyUpdates",
+        link: "https://linktr.ee/rekt2richez",
       },
       {
         icon: twitter,
-        link: "https://x.com/XPCrypto247?s=09",
+        link: "https://x.com/REKT2RICHEZLIFE",
       },
       {
         icon: youtube,
-        link: "https://www.youtube.com/@EXPERIENCECRYPTO247",
+        link: "https://www.youtube.com/@R2R-REKT2RICHES",
       },
     ],
   },
@@ -481,20 +481,20 @@ const data = [
     ],
   },
   {
-    img: "/img/ambassadors/14.png",
-    name: "Rekt 2 Riches",
+    img: "/img/ambassadors/5.png",
+    name: "Experience Crypto 24/7",
     social: [
       {
         icon: telegram,
-        link: "https://linktr.ee/rekt2richez",
+        link: "https://t.me/ExperienceCrypto247_DailyUpdates",
       },
       {
         icon: twitter,
-        link: "https://x.com/REKT2RICHEZLIFE",
+        link: "https://x.com/XPCrypto247?s=09",
       },
       {
         icon: youtube,
-        link: "https://www.youtube.com/@R2R-REKT2RICHES",
+        link: "https://www.youtube.com/@EXPERIENCECRYPTO247",
       },
     ],
   },
