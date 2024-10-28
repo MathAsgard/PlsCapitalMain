@@ -13,7 +13,7 @@ const renderer = ({
 }) => {
 	hours = (days % 24) + hours;
 	if (completed) {
-		return <span style={{ color: "#DC3545" }}>Presale has Ended!</span>;
+		return <span style={{ color: "#3bdc35" }}>Presale has Started!</span>;
 	} else {
 		return (
 			<div
