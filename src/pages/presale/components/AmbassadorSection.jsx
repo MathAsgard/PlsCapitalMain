@@ -549,7 +549,7 @@ const data = [
       },
     ],
   },
-		  {
+          {
 	  img: "/img/ambassadors/16.png",
     name: "Math",
     social: [
