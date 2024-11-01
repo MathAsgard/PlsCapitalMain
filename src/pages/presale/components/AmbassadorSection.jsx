@@ -549,6 +549,24 @@ const data = [
       },
     ],
   },
+		  {
+	  img: "/img/ambassadors/16.png",
+    name: "Math",
+    social: [
+      {
+        icon: telegram,
+        link: "",
+      },
+      {
+        icon: twitter,
+        link: "",
+      },
+      {
+        icon: youtube,
+        link: "",
+      },
+    ],
+  },
 ];
 
 const selectOptions = [
