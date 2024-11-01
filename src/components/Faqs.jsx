@@ -14,7 +14,7 @@ const Faqs = () => {
 							FAQ
 						</h2>
 						<div className="text-gradient font-medium">
-							"Frequently Asked Questions about Capital Farms
+							"Frequently Asked Questions 
 						</div>
 					</div>
 					<div className="flex flex-wrap gap-4 xl:gap-x-10">
@@ -83,61 +83,61 @@ const data = [
 		id: 1,
 		title: "What is Pulse Capital?",
 		content:
-			"Capital Farms is a decentralized application (dApp) that allows users to manage and monitor their portfolio. It provides data-driven insights to help users make informed decisions about their investments.",
+			"Pulse Capital is a DeFi protocol built on the PulseChain ecosystem, offering high-yield staking opportunities through features like Capital Farms, the Heart Fund, and the STOCK Vault. It’s designed to maximize user rewards while maintaining long-term sustainability through innovative mechanisms like rehypothecation and controlled token emissions.",
 	},
 	{
 		id: 2,
-		title: "How can I participate in Pulse Capital?",
+		title: "How does Pulse Capital differ from other DeFi platforms?",
 		content:
-			"To get started with Capital Farms, you need to create an account on the platform. Once you have created an account, you can connect your wallet and start managing your assets and portfolio.",
+			"Pulse Capital stands out with its unique approach to sustainability and reward optimization. By leveraging rehypothecation on PulseX, it offers enhanced APRs without increasing token emissions, preserving the value of native tokens like PCAP and STOCK. This model enables high yields while protecting the platform from inflation.",
 	},
 	{
 		id: 3,
-		title: "How does Pulse Capital work?",
+		title: "What is rehypothecation, and how does it benefit investors?",
 		content:
-			"Yes, Capital Farms is safe to use. The platform uses blockchain technology to secure user data and transactions. It also provides users with full control over their assets and portfolio.",
+			"Rehypothecation is the process of reinvesting staked assets to generate additional returns. Pulse Capital uses rehypothecation on PulseX to subsidize rewards in the Capital Farms and Heart Fund, allowing users to earn higher APRs without relying on high token emissions. This strategy provides investors with competitive yields while ensuring sustainable growth.",
 	},
 	{
 		id: 4,
-		title: "What tokens are supported in Pulse Capital?",
+		title: "What are Capital Farms, and how can I benefit from them?",
 		content:
-			"If you have any questions or need assistance, you can contact Capital Farms support by sending an email to demo@gmail.com",
+			"Capital Farms are staking pools in Pulse Capital where users can stake their PulseX LP tokens to earn rewards. With a 25% APR boost over PulseX, Capital Farms offer APRs set at 125% of those on PulseX, giving users a lucrative option for maximizing their returns on staked LP tokens.",
 	},
 	{
 		id: 5,
-		title: "What is Capital Farms?",
+		title: "How does the Heart Fund work, and what makes it unique?",
 		content:
-			"If you have any questions or need assistance, you can contact Capital Farms support by sending an email to",
+			"The Heart Fund is a specialized staking pool that allows users to stake a combination of LP tokens and STOCK tokens in a 75% LP to 25% STOCK ratio. It offers a 50% APR boost over PulseX, setting its APR at 150% of PulseX pools. This exclusive pool is designed for users seeking higher returns through balanced liquidity contributions.",
 	},
 	{
 		id: 6,
-		title: "Are there fees associated with using Pulse Capital?",
+		title: "What is the STOCK Vault, and how does it enhance returns?",
 		content:
-			"If you have any questions or need assistance, you can contact Capital Farms support by sending an email to",
+			"The STOCK Vault is a staking pool that offers high APRs for STOCK token holders. By allowing users to lock their STOCK tokens for extended periods, they can earn additional shares per token, with bonuses up to 300% for longer lock durations. The STOCK Vault’s rewards are amplified by rehypothecation, making it ideal for long-term investors.",
 	},
 	{
 		id: 7,
-		title: "What is the Heart Fund?",
+		title: "How does Pulse Capital control token emissions to prevent inflation?",
 		content:
-			"If you have any questions or need assistance, you can contact Capital Farms support by sending an email to",
+			"Pulse Capital limits PCAP token emissions to protect against inflation, despite offering high APRs. By subsidizing rewards through rehypothecation rather than relying on high emissions, the platform maintains the long-term value of its native tokens. This low-emission approach ensures sustainable growth and value retention.",
 	},
 	{
 		id: 8,
-		title: "How can I maximize my earnings in Pulse Capital?",
+		title: "What is the purpose of the STOCK Lock feature?",
 		content:
-			"If you have any questions or need assistance, you can contact Capital Farms support by sending an email to",
+			"The STOCK Lock feature allows users to lock their STOCK tokens for 14 days to avoid a 5% sell tax. This short-term lock option offers a tax-free exit for users who wish to hold their tokens without incurring penalties, encouraging long-term participation and supporting platform stability.",
 	},
 	{
 		id: 9,
-		title: "What is the STOCK Pool?",
+		title: "How does Pulse Capital’s 25% and 50% APR boost benefit investors?",
 		content:
-			"If you have any questions or need assistance, you can contact Capital Farms support by sending an email to",
+			"Pulse Capital provides a 25% APR boost in Capital Farms and a 50% APR boost in the Heart Fund, meaning that APRs are set at 125% and 150% of PulseX APRs, respectively. These boosts allow investors to earn significantly higher returns, making Pulse Capital an attractive option for yield optimization within the PulseChain ecosystem.",
 	},
 	{
 		id: 10,
-		title: "Is Pulse Capital secure?",
+		title: " Is Pulse Capital suitable for long-term investors?",
 		content:
-			"If you have any questions or need assistance, you can contact Capital Farms support by sending an email to",
+			"Yes, Pulse Capital is designed to benefit long-term investors through various mechanisms like the STOCK Vault’s extended lock bonuses and the STOCK Lock’s tax-free exit option. The platform’s sustainable growth model, low token emissions, and enhanced APRs provide a stable environment for users looking to maximize returns over time.",
 	},
 ];
 

@@ -13,7 +13,7 @@ const renderer = ({
 }) => {
 	hours = (days % 24) + hours;
 	if (completed) {
-		return <span style={{ color: "#3bdc35" }}>Presale has Started!</span>;
+		return <span style={{ color: "#3bdc35" }}>Presale has Ended!</span>;
 	} else {
 		return (
 			<div
@@ -54,17 +54,9 @@ const renderer = ({
 	}
 };
 const PresaleCountdown = ({ targetDate }) => {
-	const convertDate = (date, tzString) => {
-		return new Date(
-			(typeof date === "string" ? new Date(date) : date).toLocaleString(
-				"en-US",
-				{ timeZone: tzString }
-			)
-		);
-	};
 	return (
 		<Countdown
-			date={convertDate(targetDate, "Asia/singapore")}
+			date={targetDate}
 			renderer={renderer}
 		/>
 	);

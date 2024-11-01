@@ -9,7 +9,7 @@ import { Link, useLocation } from "react-router-dom";
 import CapitalFarmsCard from "../pages/capital-farms/components/CapitalFarmsCard";
 import Zapper from "../components/Zapper";
 import CustomModal from "./CustomModal";
-import BigNumber from 'bignumber.js/bignumber'
+import BigNumber from "bignumber.js/bignumber";
 import {
   Check,
   ClearIcon,
@@ -36,22 +36,30 @@ import WallecIcon from "../assets/img/wallet/WalletIcon";
 import SafeIcon from "../assets/img/wallet/SafeIcon";
 import Coinbase from "../assets/img/wallet/Coinbase.js";
 import { TeamModal } from "./TeamModal";
-import lpABI from "../config/abi/lpToken.json"
-import { multicall, writeContract, fetchBalance, waitForTransaction } from '@wagmi/core';
+import lpABI from "../config/abi/lpToken.json";
 import {
-    useAccount,
-    useBalance,
-    useConnect,
-    useDisconnect,
-    useChainId,
-    useSwitchNetwork,
-  } from 'wagmi'
+  multicall,
+  writeContract,
+  fetchBalance,
+  waitForTransaction,
+} from "@wagmi/core";
+import {
+  useAccount,
+  useBalance,
+  useConnect,
+  useDisconnect,
+  useChainId,
+  useSwitchNetwork,
+} from "wagmi";
 
-  function toLocaleString(num, min, max) {
-    const _number = isNaN(Number(num)) ? 0 : Number(num)
-    return _number.toLocaleString(undefined, {minimumFractionDigits: min, maximumFractionDigits: max});
-  }
-  
+function toLocaleString(num, min, max) {
+  const _number = isNaN(Number(num)) ? 0 : Number(num);
+  return _number.toLocaleString(undefined, {
+    minimumFractionDigits: min,
+    maximumFractionDigits: max,
+  });
+}
+
 const Header = () => {
   const [scroll, setScroll] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -60,7 +68,8 @@ const Header = () => {
   const [login, setLogin] = React.useState(false);
   const [openWallet, setOpenWallet] = React.useState(null);
   const [teamModal, setTeamModal] = React.useState(false);
-  const [zappedModalOpenFromHeader, setZappedModalOpenFromHeader] = React.useState(false);
+  const [zappedModalOpenFromHeader, setZappedModalOpenFromHeader] =
+    React.useState(false);
   const [pcapPrice, setPcapPrice] = React.useState("0.00");
   const [recentTransactions, setRecentTransactions] = React.useState([]);
 
@@ -85,108 +94,134 @@ const Header = () => {
   };
 
   const CHAIN = 369;
-  const { address, connector, isConnected } = useAccount()
-  const userBalance = useBalance({address: address})
-  
+  const { address, connector, isConnected } = useAccount();
+  const userBalance = useBalance({ address: address });
+
   const [connectModal, setConnectModal] = React.useState(false);
 
-  const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
-  const { disconnect } = useDisconnect()
+  const { connect, connectors, error, isLoading, pendingConnector } =
+    useConnect();
+  const { disconnect } = useDisconnect();
 
-  const userAccount = useAccount({
-		onConnect() {
-			//setConnected(true)
-		},
-		onDisconnect() {
-			//setConnected(false)
-		},
-	})
   const handleCopyWalletAddress = () => {
-		navigator.clipboard.writeText(address);
-		window.alert("Copied to clipboard");
-	}
+    navigator.clipboard.writeText(address);
+    window.alert("Copied to clipboard");
+  };
 
-  const chain  = useChainId()
-  const { chains, _error, _isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  const chain = useChainId();
+  const { chains, _error, _isLoading, pendingChainId, switchNetwork } =
+    useSwitchNetwork();
 
   if (isConnected) {
-    if(chain.id !== CHAIN && !pendingChainId && switchNetwork) switchNetwork(CHAIN)
-    if(!localStorage[address]) {
-      localStorage["warren-"+address] = ""
+    if (chain.id !== CHAIN && !pendingChainId && switchNetwork)
+      switchNetwork(CHAIN);
+    if (!localStorage["warren-" + address]) {
+      localStorage["warren-" + address] = "[]";
     }
   }
 
   async function getStats() {
-		const response = await fetch(`https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee`);
-		const rsps = await response.json();
-		
-		const pinePrice = rsps.pairs?.filter((pair)=>pair.pairAddress === '0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee')[0].priceUsd;
-    setPcapPrice(toLocaleString(pinePrice*1000, 3, 3) + '/K');
-    getTokenBalances();
-    const txs = localStorage["warren-"+userAccount.address].replace("...", "").split("...").reverse()
-    if(txs.length <= 5) setRecentTransactions(txs)
-    else setRecentTransactions(txs.slice(txs.length-6, txs.length-1))
-  }
-  async function getTokenBalances() {
-		const plsBalance = await fetchBalance({
-		  address: userAccount.address,
-		});
-		const tokens = [
-		  '0xefD766cCb38EaF1dfd701853BFCe31359239F305', //dai
-		  '0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d', //inc
-		//'0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39', //hex
-		  '0x95B303987A60C71504D99Aa1b13B4DA07b0790ab', //plsx
-		//'0xb17D901469B9208B17d916112988A3FeD19b5cA1', //wbtc
-		  '0x02DcdD04e3F455D838cd1249292C58f3B79e3C3C', //eth
-		  '0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07', //usdc
-		  '0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f', //usdt
-		];
-		const pairs = [
-		  '0xe56043671df55de5cdf8459710433c10324de0ae', //wpls
-		  '0xf808bb6265e9ca27002c0a04562bf50d4fe37eaa', //inc
-		  '0xf1f4ee610b2babb05c635f726ef8b0c568c8dc65', //hex
-		  '0x1b45b9148791d3a104184cd5dfe5ce57193a3ee9', //plsx
-		  '0xdb82b0919584124a0eb176ab136a0cc9f148b2d1', //wbtc
-		  '0x42abdfdb63f3282033c766e72cc4810738571609',//eth
-		];
-		const response = await fetch(`https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pairs.join(',')}`);
-		const rsps = await response.json();
-			const _prices = tokens.map((token)=>{
-		  if(token === '0xefD766cCb38EaF1dfd701853BFCe31359239F305' ||
-			 token === '0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07' || 
-			 token === '0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f') return '1';
-		  return rsps.pairs.filter(e=>e.baseToken.address==token)[0].priceUsd;
-		})
-		const prices = [rsps.pairs.filter(e=>e.baseToken.address=="0xA1077a294dDE1B09bB078844df40758a5D0f9a27")[0].priceUsd].concat(_prices)
-	
-		const _defaultTokenReserves = rsps.pairs[0].liquidity.usd
-		const _tokens = await multicall({
-			contracts: tokens.map((token)=>{
-				return {
-					address: token,
-					abi: lpABI,
-					functionName: 'balanceOf',
-					args: [userAccount.address]
-				}
-			})
-		});
-		const balances = [new BigNumber(plsBalance?.value)].concat(_tokens.map(token=>new BigNumber(token.result)));
-		tokens.forEach((token, index)=>{
-			const filtered = selectOptions.filter(i=>i.address === token)[0]
-			filtered.value = balances[index+1].div(1e18);
-			filtered.price = prices[index+1];	
-		})
-		
-		selectOptions[0].value = new BigNumber(plsBalance.value).div(1e18);
-		selectOptions[0].price = prices[0];
-	}
-  useEffect(() => {
-		getStats();
-	},[]);
+    try {
+      const response = await fetch(
+        `https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x0000000000000000000000000000000000000000`
+      );
+      const rsps = await response.json();
 
-	useInterval(async () => {
-		await getStats();
-	}, 5000);
+      if (!rsps || !rsps.pairs) {
+        setPcapPrice("1.0/K");
+      } else {
+        const pinePrice = rsps.pairs.filter(
+          (pair) =>
+            pair.pairAddress === "0x0000000000000000000000000000000000000000"
+        )[0].priceUsd;
+        setPcapPrice(toLocaleString(pinePrice * 1000, 3, 3) + "/K");
+      }
+
+      getTokenBalances();
+      if (isConnected) {
+        const txs = JSON.parse(localStorage["warren-" + address]).reverse();
+        if (txs.length < 5) setRecentTransactions(txs);
+        else setRecentTransactions(txs.slice(0, 5));
+      }
+    } catch (error) {
+      setPcapPrice("1.0/K");
+    }
+  }
+  
+  async function getTokenBalances() {
+    const plsBalance = await fetchBalance({
+      address: address,
+    });
+    const tokens = [
+      "0xefD766cCb38EaF1dfd701853BFCe31359239F305", //dai
+      "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d", //inc
+      //'0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39', //hex
+      "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab", //plsx
+      //'0xb17D901469B9208B17d916112988A3FeD19b5cA1', //wbtc
+      "0x02DcdD04e3F455D838cd1249292C58f3B79e3C3C", //eth
+      "0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07", //usdc
+      "0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f", //usdt
+    ];
+    const pairs = [
+      "0xe56043671df55de5cdf8459710433c10324de0ae", //wpls
+      "0xf808bb6265e9ca27002c0a04562bf50d4fe37eaa", //inc
+      "0xf1f4ee610b2babb05c635f726ef8b0c568c8dc65", //hex
+      "0x1b45b9148791d3a104184cd5dfe5ce57193a3ee9", //plsx
+      "0xdb82b0919584124a0eb176ab136a0cc9f148b2d1", //wbtc
+      "0x42abdfdb63f3282033c766e72cc4810738571609", //eth
+    ];
+    const response = await fetch(
+      `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${pairs.join(
+        ","
+      )}`
+    );
+    const rsps = await response.json();
+    const _prices = tokens.map((token) => {
+      if (
+        token === "0xefD766cCb38EaF1dfd701853BFCe31359239F305" ||
+        token === "0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07" ||
+        token === "0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f"
+      )
+        return "1";
+      return rsps.pairs.filter((e) => e.baseToken.address == token)[0].priceUsd;
+    });
+    const prices = [
+      rsps.pairs.filter(
+        (e) =>
+          e.baseToken.address == "0xA1077a294dDE1B09bB078844df40758a5D0f9a27"
+      )[0].priceUsd,
+    ].concat(_prices);
+
+    const _defaultTokenReserves = rsps.pairs[0].liquidity.usd;
+    const _tokens = await multicall({
+      contracts: tokens.map((token) => {
+        return {
+          address: token,
+          abi: lpABI,
+          functionName: "balanceOf",
+          args: [address],
+        };
+      }),
+    });
+    const balances = [new BigNumber(plsBalance?.value)].concat(
+      _tokens.map((token) => new BigNumber(token.result))
+    );
+    tokens.forEach((token, index) => {
+      const filtered = selectOptions.filter((i) => i.address === token)[0];
+      filtered.value = balances[index + 1].div(1e18);
+      filtered.price = prices[index + 1];
+    });
+
+    selectOptions[0].value = new BigNumber(plsBalance.value).div(1e18);
+    selectOptions[0].price = prices[0];
+  }
+  useEffect(() => {
+    getStats();
+  }, []);
+
+  useInterval(async () => {
+    await getStats();
+  }, 5000);
 
   return (
     <>
@@ -382,49 +417,63 @@ const Header = () => {
                 </h5>
                 <span className="w-full bg-gradient8 h-[1px] block" />
                 <div className="py-9 px-8 flex flex-col gap-[11px]">
-                  {connectors.slice().reverse().map((connector, index) => (
-                  <>
-                    {connector.name === "Injected" && 
-                    <div >
-                      <button
-                        type="button"
-                        className="rounded-[10px] bg-gradient8 w-full text-md font-semibold text-white text-opacity-80 p-[1px] group"
-                        onClick={() => {
-                          connect({ connector })
-                          setLoginPopupOpen(false);
-                        }}
-                      >
-                        <div className="d-center justify-between rounded-[10px] bg-[#161616] h-[48px] px-4">
-                          <span>Rabby</span>
-                          <Rabby/>
-                        </div>  
-                      </button>
-                    </div>
-                    }
-                    <button
-                      className="rounded-[10px] bg-gradient8 w-full text-md font-semibold text-white text-opacity-80 p-[1px] group"
-                      key={connector.uid}
-                      onClick={() => {
-                          connect({ connector })
-                          setLoginPopupOpen(false)
-                      }}
-                    >
-                      <div className="d-center justify-between rounded-[10px] bg-[#161616] h-[48px] px-4">
-                        <spam>
-                            { connector.name }
-                            {isLoading && connector.id === pendingConnector?.id && ' (connecting)'}
-                        </spam>
+                  {connectors
+                    .slice()
+                    .reverse()
+                    .map((connector, index) => (
+                      <>
+                        {connector.name === "Injected" && (
+                          <div>
+                            <button
+                              type="button"
+                              className="rounded-[10px] bg-gradient8 w-full text-md font-semibold text-white text-opacity-80 p-[1px] group"
+                              onClick={() => {
+                                connect({ connector });
+                                setLoginPopupOpen(false);
+                              }}
+                            >
+                              <div className="d-center justify-between rounded-[10px] bg-[#161616] h-[48px] px-4">
+                                <span>Rabby</span>
+                                <Rabby />
+                              </div>
+                            </button>
+                          </div>
+                        )}
+                        <button
+                          className="rounded-[10px] bg-gradient8 w-full text-md font-semibold text-white text-opacity-80 p-[1px] group"
+                          key={connector.uid}
+                          onClick={() => {
+                            connect({ connector });
+                            setLoginPopupOpen(false);
+                          }}
+                        >
+                          <div className="d-center justify-between rounded-[10px] bg-[#161616] h-[48px] px-4">
+                            <spam>
+                              {connector.name}
+                              {isLoading &&
+                                connector.id === pendingConnector?.id &&
+                                " (connecting)"}
+                            </spam>
 
-                          {connector.name === 'MetaMask' && <Metamask/>}
-                          {connector.name === 'Safe' && <SafeIcon/>}
-                          {connector.name === 'Coinbase Wallet' && <Coinbase/>}
-                          {connector.name === 'WalletConnect' && <WallecIcon/>}
-                          {connector.name === 'Injected' && <img src="/img/wallet/injected.svg" height="40px" style={{marginRight: "-2px"}}/>}
-
-                      </div>
-                    </button>
-                  </>
-                ))}
+                            {connector.name === "MetaMask" && <Metamask />}
+                            {connector.name === "Safe" && <SafeIcon />}
+                            {connector.name === "Coinbase Wallet" && (
+                              <Coinbase />
+                            )}
+                            {connector.name === "WalletConnect" && (
+                              <WallecIcon />
+                            )}
+                            {connector.name === "Injected" && (
+                              <img
+                                src="/img/wallet/injected.svg"
+                                height="40px"
+                                style={{ marginRight: "-2px" }}
+                              />
+                            )}
+                          </div>
+                        </button>
+                      </>
+                    ))}
                 </div>
               </div>
             </div>
@@ -487,10 +536,10 @@ const Header = () => {
                         <span>Recent Transactions</span>
                         <button
                           type="button"
-                          onClick={()=>{
-                            localStorage["warren-"+userAccount.address] = []
-                            setRecentTransactions([])
-                            getStats()
+                          onClick={() => {
+                            localStorage["warren-" + address] = [];
+                            setRecentTransactions([]);
+                            getStats();
                           }}
                         >
                           Clear ALL
@@ -500,17 +549,31 @@ const Header = () => {
                         PulseChain
                       </span>
                       {recentTransactions.map((transaction, index) => (
-                      <div className="flex gap-3 items-center text-[13px]">
-                        <span>
-                          <Check />
-                        </span>
-                        <div className="w-0 flex-grow text-gradient-4">
-                          {transaction}
+                        <div className="flex gap-3 items-center text-[13px]">
+                          <span>
+                            <Check />
+                          </span>
+                          <div className="w-0 flex-grow ">
+                            <span className="text-gradient-4">
+                              {transaction.protocol}{" "}
+                            </span>{" "}
+                            | {transaction.action} {transaction.text} at{" "}
+                            <span className="text-gradient-4">
+                              {new Date(transaction.timestamp).toLocaleString(
+                                "en-GB"
+                              )}
+                            </span>
+                          </div>
+                          <Link
+                            to={
+                              "https://scan.pulsechain.com/tx/" +
+                              transaction.transaction
+                            }
+                            target="about:blank"
+                          >
+                            <Redirect />
+                          </Link>
                         </div>
-                        <Link to="#">
-                          <Redirect />
-                        </Link>
-                      </div>
                       ))}
                     </>
                   ) : (
@@ -523,7 +586,11 @@ const Header = () => {
                         <input
                           type="text"
                           className="w-full py-2 px-3 h-[33px] bg-transparent text-gradient-3 text-center outline-none"
-                          value={address.slice(0, 6) + '...' + address.slice(address.length - 6, address.length)}
+                          value={
+                            address.slice(0, 6) +
+                            "..." +
+                            address.slice(address.length - 6, address.length)
+                          }
                           ref={ref}
                         />
                         <button
@@ -535,14 +602,19 @@ const Header = () => {
                         </button>
                       </div>
                       <div className="mt-4 text-sm font-medium">
-                          {selectOptions.map((token, index) => (
-                            <div className="flex justify-between mb-[6px]">
-                              <span>
-                                <span className="text-gradient-2">{token.title}</span> Balance
-                              </span>
-                              <span>{toLocaleString(Number(token.value), 2, 2)}</span>
-                            </div>
-                          ))}
+                        {selectOptions.map((token, index) => (
+                          <div className="flex justify-between mb-[6px]">
+                            <span>
+                              <span className="text-gradient-2">
+                                {token.title}
+                              </span>{" "}
+                              Balance
+                            </span>
+                            <span>
+                              {toLocaleString(Number(token.value), 2, 2)}
+                            </span>
+                          </div>
+                        ))}
                         <div className="mt-12 text-center">
                           <div className="text-gradient-5 flex items-center justify-center gap-[6px] mb-[6px]">
                             <span>View on PulseScan</span>
@@ -556,7 +628,7 @@ const Header = () => {
                             onClick={() => {
                               setOpenWallet(null);
                               setLogin(false);
-                              disconnect()
+                              disconnect();
                             }}
                           >
                             Disconnect Wallet
@@ -573,10 +645,7 @@ const Header = () => {
       </CustomModal>
       <TeamModal open={teamModal} setOpen={setTeamModal} />
       {/* Only For Modal Show */}
-      <CapitalFarmsCard
-
-        modalsOnly={true}
-      />
+      <CapitalFarmsCard modalsOnly={true} />
       <Zapper
         zappedModalOpenFromHeader={zappedModalOpenFromHeader}
         setZappedModalOpenFromHeader={setZappedModalOpenFromHeader}
@@ -595,7 +664,7 @@ const ButtonGroup = ({
   isConnected,
   disconnect,
   address,
-  pcapPrice
+  pcapPrice,
 }) => {
   const [selectOpen, setSelectOpen] = React.useState(false);
   return (
@@ -610,14 +679,16 @@ const ButtonGroup = ({
         >
           <span className="text-gradient-2 font-bold">PCAP</span> ${pcapPrice}
         </div>
-        { window.location.pathname === '/' ? 
+        {window.location.pathname === "/" ? (
           <Link
             className="btn-primary py-2 md:min-w-[150px]"
-            
             to="capital-farms"
           >
-            <span style={{textAlign: "center", width: "100%"}}>Launch Dapp</span>
-          </Link> : isConnected ? (
+            <span style={{ textAlign: "center", width: "100%" }}>
+              Launch Dapp
+            </span>
+          </Link>
+        ) : isConnected ? (
           <>
             <div className="relative">
               <button
@@ -627,7 +698,11 @@ const ButtonGroup = ({
                 type="button"
               >
                 <span className="btn-primary py-2 md:min-w-[150px] after:rounded-r-[10px] before:rounded-r-[0] after:inset-0 before:bg-[#070115] before:inset-[1px] before:bg-none before:right-10 hover:after:opacity-100 pr-14 before:z-[3]">
-                  <span className="text-white">{address.slice(0, 4) + '...' + address.slice(address.length - 5, address.length)}</span>
+                  <span className="text-white">
+                    {address.slice(0, 4) +
+                      "..." +
+                      address.slice(address.length - 5, address.length)}
+                  </span>
                 </span>
                 <span className="absolute right-2 top-0 h-full flex items-center z-10">
                   <UserIcon />
@@ -685,7 +760,6 @@ const ButtonGroup = ({
           </button>
         )}
       </div>
-
     </>
   );
 };
@@ -725,7 +799,7 @@ const menu = [
         subname: "Stake & Earn a 25% Yield Boost",
         url: "/capital-farms",
       },
-     {
+      {
         name: "Heart Fund",
         subname: "Stake & Earn a 50% Yield Boost",
         url: "/heart-fund",
@@ -744,7 +818,7 @@ const menu = [
       {
         name: "WhitePaper",
         subname: "Innovating DeFi Solutions",
-        url: "#",
+        url: "https://pulse-capital-2.gitbook.io/whitepaper",
       },
       {
         name: "Brand Kit",
@@ -808,66 +882,66 @@ const wallet = [
 export default Header;
 
 export const selectOptions = [
-	// {
-	// 	img: pcap,
-	// 	title: "PCAP",
-	// 	subtitle: "Pulse Capital",
-	// 	value: "1,283,299.88",
-	// },
-	{
-		address: "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
-		img: pls,
-		title: "PLS",
-		subtitle: "Pulse",
-		value: "0.00",
-		price: "0.00",
-	},
-	{
-		address: "0xefD766cCb38EaF1dfd701853BFCe31359239F305",
-		img: dai,
-		title: "DAI",
-		subtitle: "DAI From Ethereum",
-		value: "0.00",
-		price: "0.00",
-	},
-	{
-		address: "0x02DcdD04e3F455D838cd1249292C58f3B79e3C3C",
-		img: weth,
-		title: "WETH",
-		subtitle: "WETH From Ethereum",
-		value: "0.00",
-		price: "0.00",
-	},
-	{
-		address: "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
-		img: plsx,
-		title: "PLSX",
-		subtitle: "PulseX",
-		value: "0.00",
-		price: "0.00",
-	},
-	{
-		address: "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
-		img: inc,
-		title: "INC",
-		subtitle: "Incentive",
-		value: "0.00",
-		price: "0.00",
-	},
-	{
-		address: "0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f",
-		img: usdt,
-		title: "USDT",
-		subtitle: "USDT From Ethereum",
-		value: "0.00",
-		price: "0.00",
-	},
-	{
-		address: "0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07",
-		img: usdc,
-		title: "USDC",
-		subtitle: "USDC From Ethereum",
-		value: "0.00",
-		price: "0.00",
-	},
+  // {
+  // 	img: pcap,
+  // 	title: "PCAP",
+  // 	subtitle: "Pulse Capital",
+  // 	value: "1,283,299.88",
+  // },
+  {
+    address: "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
+    img: pls,
+    title: "PLS",
+    subtitle: "Pulse",
+    value: "0.00",
+    price: "0.00",
+  },
+  {
+    address: "0xefD766cCb38EaF1dfd701853BFCe31359239F305",
+    img: dai,
+    title: "DAI",
+    subtitle: "DAI From Ethereum",
+    value: "0.00",
+    price: "0.00",
+  },
+  {
+    address: "0x02DcdD04e3F455D838cd1249292C58f3B79e3C3C",
+    img: weth,
+    title: "WETH",
+    subtitle: "WETH From Ethereum",
+    value: "0.00",
+    price: "0.00",
+  },
+  {
+    address: "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
+    img: plsx,
+    title: "PLSX",
+    subtitle: "PulseX",
+    value: "0.00",
+    price: "0.00",
+  },
+  {
+    address: "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
+    img: inc,
+    title: "INC",
+    subtitle: "Incentive",
+    value: "0.00",
+    price: "0.00",
+  },
+  {
+    address: "0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f",
+    img: usdt,
+    title: "USDT",
+    subtitle: "USDT From Ethereum",
+    value: "0.00",
+    price: "0.00",
+  },
+  {
+    address: "0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07",
+    img: usdc,
+    title: "USDC",
+    subtitle: "USDC From Ethereum",
+    value: "0.00",
+    price: "0.00",
+  },
 ];

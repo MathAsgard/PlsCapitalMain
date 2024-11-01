@@ -1,65 +1,56 @@
 import { Switch } from "@material-tailwind/react";
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import CustomSelectTwo from "../../../components/CustomSelectTwo";
 import CapitalFarmsCard from "./CapitalFarmsCard";
-import farms from "../../../config/constants/farms.js";
+import farms from "../../../config/constants/farms.js"
 
-let farmsArray = JSON.parse(JSON.stringify(farms));
-let farmsFilters = {};
+let farmsArray = JSON.parse(JSON.stringify(farms))
+let farmsFilters = {}
 
 const CapitalFarmSection = () => {
   const [view, setView] = React.useState("list");
   const [value, setValue] = React.useState("");
 
   const [active, setActive] = useState(true);
-  const [stackedOnly, setStacked] = useState(false);
-  const [search, setSearch] = useState("");
-  const [dropdown, setDropdown] = useState("");
+	const [stackedOnly, setStacked] = useState(false);
+	const [search, setSearch] = useState('');
+	const [dropdown, setDropdown] = useState('');
 
   function dropDownFilter(value) {
-    const _val = value.toLowerCase();
-    switch (_val) {
-      case "":
-        farmsArray = JSON.parse(JSON.stringify(farms));
-        break;
-      case "hot":
-        farmsArray = JSON.parse(JSON.stringify(farms));
-        farmsArray.reverse();
-        break;
-      case "apr":
-        farmsArray = JSON.parse(JSON.stringify(farms));
-        farmsArray.sort(function (a, b) {
-          return (
-            parseFloat(farmsFilters[b.lpAddress].farmAPR) -
-            parseFloat(farmsFilters[a.lpAddress].farmAPR)
-          );
-        });
-        break;
-      case "earned":
-        farmsArray = JSON.parse(JSON.stringify(farms));
-        farmsArray.sort(function (a, b) {
-          return (
-            parseFloat(farmsFilters[b.lpAddress].pendingPine) -
-            parseFloat(farmsFilters[a.lpAddress].pendingPine)
-          );
-        });
-        break;
-      case "liquidity":
-        farmsArray = JSON.parse(JSON.stringify(farms));
-        farmsArray.sort(function (a, b) {
-          return (
-            parseFloat(farmsFilters[b.lpAddress].totalLiquidity) -
-            parseFloat(farmsFilters[a.lpAddress].totalLiquidity)
-          );
-        });
-        break;
-    }
-    setDropdown(value);
-  }
+    const _val = value.toLowerCase()
+		switch (_val) {
+			case '':
+				farmsArray = JSON.parse(JSON.stringify(farms));
+				break;
+			case 'hot': 
+				farmsArray = JSON.parse(JSON.stringify(farms));
+				farmsArray.reverse();
+				break;
+			case 'apr': 
+				farmsArray = JSON.parse(JSON.stringify(farms))
+				farmsArray.sort(function(a, b) {
+					return parseFloat(farmsFilters[b.lpAddress].farmAPR) - parseFloat(farmsFilters[a.lpAddress].farmAPR);
+				});
+				break;
+			case 'earned': 
+				farmsArray = JSON.parse(JSON.stringify(farms))
+				farmsArray.sort(function(a, b) {
+					return parseFloat(farmsFilters[b.lpAddress].pendingPine) - parseFloat(farmsFilters[a.lpAddress].pendingPine);
+				});
+				break;
+			case 'liquidity': 
+				farmsArray = JSON.parse(JSON.stringify(farms))
+				farmsArray.sort(function(a, b) {
+					return parseFloat(farmsFilters[b.lpAddress].totalLiquidity) - parseFloat(farmsFilters[a.lpAddress].totalLiquidity);
+				});
+				break;
+		}
+		setDropdown(value)
+	}
 
   function objectToFilter(lpAddress, object) {
-    farmsFilters[lpAddress] = object;
-  }
+		farmsFilters[lpAddress] = object
+	}
 
   return (
     <section className="pt-12 xl:pt-24 relative z-[999]">
@@ -70,8 +61,7 @@ const CapitalFarmSection = () => {
               type="text"
               className="w-full h-10 border-0 outline-0 bg-[#10032F] font-semibold text-white placeholder:text-white placeholder:text-opacity-50 px-[18px] rounded-[5px]"
               placeholder="Search farms"
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
+              onChange={(e) => setSearch(e.target.value)} value={search}
             />
           </div>
           <div className="w-full sm:max-w-[180px]">
@@ -115,20 +105,14 @@ const CapitalFarmSection = () => {
               <button
                 type="button"
                 className={`view-btn h-10 ${view === "list" ? "active" : ""}`}
-                onClick={() => {
-                  setView("list");
-                  setActive(true);
-                }}
+                onClick={() => {setView("list"); setActive(true)}}
               >
                 <span>Active</span>
               </button>
               <button
                 type="button"
                 className={`view-btn h-10 ${view === "grid" ? "active2" : ""}`}
-                onClick={() => {
-                  setView("grid");
-                  setActive(false);
-                }}
+                onClick={() => {setView("grid"); setActive(false)}}
               >
                 <span>Inactive</span>
               </button>
@@ -173,15 +157,7 @@ const CapitalFarmSection = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 xl:gap-10">
           {farmsArray.map((farm, index) => (
-            <CapitalFarmsCard
-              key={index}
-              objectToFilter={objectToFilter}
-              active={active}
-              search={search}
-              stakedOnly={stackedOnly}
-              dropdown={dropdown}
-              {...farm}
-            />
+              <CapitalFarmsCard key={index} objectToFilter={objectToFilter} active={active} search={search} stakedOnly={stackedOnly} dropdown={dropdown} {...farm}/>
           ))}
         </div>
       </div>

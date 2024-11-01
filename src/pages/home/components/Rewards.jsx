@@ -45,34 +45,34 @@ const Rewards = () => {
 
 const data = [
 	{
-		img: "img/rewards.png",
-		badge: "Maximized Yield",
-		text: "Capital Farms boasts competitive yields of up to 125% APY, offering users a lucrative opportunity to maximize returns on their deposited LP tokens.",
+		img: "img/reward1.png",
+		badge: "Enhacned Rewards",
+		text: "Stake LP tokens in Capital Farms or the Heart Fund to access APRs set higher than PulseX, maximizing yield on your assets.",
 	},
 	{
-		img: "img/rewards.png",
-		badge: "Maximized Yield",
-		text: "Capital Farms boasts competitive yields of up to 125% APY, offering users a lucrative opportunity to maximize returns on their deposited LP tokens.",
+		img: "img/reward2.png",
+		badge: "Sustainable Growth",
+		text: "Pulse Capital’s rehypothecation strategy reinvests rewards to curb inflation, maintaining long-term stability and value for the ecosystem.",
 	},
 	{
-		img: "img/rewards.png",
-		badge: "Maximized Yield",
-		text: "Capital Farms boasts competitive yields of up to 125% APY, offering users a lucrative opportunity to maximize returns on their deposited LP tokens.",
+		img: "img/reward3.png",
+		badge: "Balanced Staking",
+		text: "Benefit from balanced contributions with both LP and STOCK tokens in Heart Fund pools, boosting returns and supporting liquidity stability.",
 	},
 	{
-		img: "img/rewards.png",
-		badge: "Maximized Yield",
-		text: "Capital Farms boasts competitive yields of up to 125% APY, offering users a lucrative opportunity to maximize returns on their deposited LP tokens.",
+		img: "img/reward4.png",
+		badge: "Inflation Control",
+		text: "With a low PCAP emission rate, Pulse Capital sustains token scarcity, preserving PCAP’s value even with high APRs.",
 	},
 	{
-		img: "img/rewards.png",
-		badge: "Maximized Yield",
-		text: "Capital Farms boasts competitive yields of up to 125% APY, offering users a lucrative opportunity to maximize returns on their deposited LP tokens.",
+		img: "img/reward5.png",
+		badge: "Strategic Reinvestment",
+		text: "Enjoy compounded benefits from reinvested earnings that increase your total returns.",
 	},
 	{
-		img: "img/rewards.png",
-		badge: "Maximized Yield",
-		text: "Capital Farms boasts competitive yields of up to 125% APY, offering users a lucrative opportunity to maximize returns on their deposited LP tokens.",
+		img: "img/reward6.png",
+		badge: "Tax Incentives",
+		text: "Lock your tokens for 14 days to avoid the 5% sell tax, maximizing net returns on your Pulse Capital investments.",
 	},
 ];
 

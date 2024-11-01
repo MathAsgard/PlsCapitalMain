@@ -1,7 +1,7 @@
 [
 	{
 		"inputs": [],
-		"name": "ClaimPoints",
+		"name": "claimPoints",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -19,7 +19,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "Deposit",
+		"name": "deposit",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -34,6 +34,17 @@
 		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			}
+		],
+		"name": "SafeERC20FailedOperation",
+		"type": "error"
 	},
 	{
 		"anonymous": false,
@@ -79,7 +90,7 @@
 				"type": "address"
 			}
 		],
-		"name": "End",
+		"name": "end",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -110,25 +121,6 @@
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "CheckID",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "deployer",
 		"outputs": [
@@ -149,25 +141,6 @@
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "idPoints",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -220,20 +193,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "PCAP_AMOUNT",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "RewardsToClaim",
+		"name": "rewardsToClaim",
 		"outputs": [
 			{
 				"internalType": "uint256[2]",
@@ -272,6 +232,19 @@
 	},
 	{
 		"inputs": [],
+		"name": "totalPcapRaised",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "totalPoints",
 		"outputs": [
 			{
@@ -291,6 +264,25 @@
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userClaimed",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",

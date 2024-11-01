@@ -7,15 +7,19 @@ import {
   InfoIcon2,
   UrlIcon,
 } from "../../../components/Icon";
-
+import toast from "react-hot-toast";
+import CustomToast from "../../../components/CustomToast.jsx";
 import BigNumber from "bignumber.js/bignumber";
 import useInterval from "../../../hooks/useInterval";
 import contracts from "../../../config/constants/contracts.js";
-import { multicall, writeContract, waitForTransaction } from "@wagmi/core";
+import {
+  multicall,
+  writeContract,
+  fetchBalance,
+  waitForTransaction,
+} from "@wagmi/core";
 import { useAccount } from "wagmi";
 import lpABI from "../../../config/abi/lpToken.json";
-import CustomToast from "../../../components/CustomToast.jsx";
-import toast from "react-hot-toast";
 
 function toLocaleString(num, min, max, cutout) {
   const _number = isNaN(Number(num)) ? 0 : Number(num);
@@ -29,6 +33,12 @@ function toLocaleString(num, min, max, cutout) {
       minimumFractionDigits: min,
       maximumFractionDigits: min,
     });
+}
+
+function addTransaction(address, transaction) {
+  const txs = JSON.parse(localStorage["warren-" + address]);
+  txs.push(transaction);
+  localStorage["warren-" + address] = JSON.stringify(txs);
 }
 
 BigNumber.config({
@@ -104,6 +114,7 @@ const HeartFundCard = ({
   const [pcapPrice, setPcapPrice] = useState(0);
   const [apr, setApr] = useState(0);
   const [calculatorAmountInput, setCalculatorAmountInput] = useState(0);
+  const [pcapPerStock, setPcapPerStock] = useState(0);
 
   const [token1, token2] = [
     farm?.lpSymbol?.split("-")[0] + ".png",
@@ -122,13 +133,20 @@ const HeartFundCard = ({
       setConnected(false);
     },
   });
+  /*
+    100 pcapPerStock
+    0.01 pcap price
+    1.1 stock price
+    plsxAPY/2 + plsxAPY*(pcapPerStock/(stockPrice/pcapPrice))
+    */
 
   function getFarmApy(poolWeight, pinePrice, poolLiquidityUsd, PINE_PER_BLOCK) {
     const SECONDS_PER_YEAR = 31536000;
     const yearlyPineRewardAllocation =
       PINE_PER_BLOCK * SECONDS_PER_YEAR * poolWeight;
     let apy =
-      ((yearlyPineRewardAllocation * pinePrice) / poolLiquidityUsd) * 150;
+      ((yearlyPineRewardAllocation * pinePrice) / poolLiquidityUsd) * 100;
+    apy = apy / 2 + apy * (pcapPerStock / (stockPrice / pcapPrice));
     return apy;
   }
   function getDailyROI(
@@ -141,12 +159,13 @@ const HeartFundCard = ({
     const dailyPineRewardAllocation =
       PINE_PER_BLOCK * SECONDS_PER_DAY * poolWeight;
     let apy =
-      ((dailyPineRewardAllocation * pinePrice) / poolLiquidityUsd) * 150;
+      ((dailyPineRewardAllocation * pinePrice) / poolLiquidityUsd) * 100;
+    apy = apy / 2 + apy * (pcapPerStock / (stockPrice / pcapPrice));
     return apy;
   }
   async function getStats() {
     const query =
-      "0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee, 0xf808Bb6265e9Ca27002c0A04562Bf50d4FE37EAA" +
+      "0x0000000000000000000000000000000000000000, 0xf808Bb6265e9Ca27002c0A04562Bf50d4FE37EAA" +
       "," +
       farm.lpAddress;
     const response = await fetch(
@@ -154,15 +173,20 @@ const HeartFundCard = ({
     );
     const rsps = await response.json();
 
-    const pinePrice = rsps.pairs?.filter(
+    const pinePrice = rsps.pairs.filter(
       (pair) =>
-        pair.pairAddress === "0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee"
-    )[0]?.priceUsd;
-    const incPrice = rsps.pairs?.filter(
+        pair.pairAddress === "0x0000000000000000000000000000000000000000"
+    )[0]
+      ? rsps.pairs.filter(
+          (pair) =>
+            pair.pairAddress === "0x0000000000000000000000000000000000000000"
+        )[0].priceUsd
+      : 0.001;
+    const incPrice = rsps.pairs.filter(
       (pair) =>
         pair.pairAddress === "0xf808Bb6265e9Ca27002c0A04562Bf50d4FE37EAA"
-    )[0]?.priceUsd;
-    const pairData = rsps.pairs?.filter(
+    )[0].priceUsd;
+    const pairData = rsps.pairs.filter(
       (pair) => pair.pairAddress === farm.lpAddress
     )[0];
 
@@ -177,7 +201,7 @@ const HeartFundCard = ({
       userLpBalance,
       userStakedLp,
       totalAllocPoint,
-      pinePerBlock,
+      _pcapPerStock,
       _stockBalance,
       _daiPlsReserves,
       _daiPlsSupply,
@@ -242,7 +266,7 @@ const HeartFundCard = ({
         },
         {
           ...contracts.masterChefRh,
-          functionName: "PcapPerStock",
+          functionName: "pcapPerStock",
         },
         {
           ...contracts.stockToken,
@@ -352,7 +376,7 @@ const HeartFundCard = ({
       userStakedLp.result ? userStakedLp.result[1] : 0
     ).div(1e18);
     setStakedStockBalance(_stakedStockBalance);
-    console.log(userStakedLp.result);
+
     const _staking =
       Number(Number(userStakedLp.result ? userStakedLp.result[0] : 0) / 1e18) >
       0;
@@ -401,7 +425,7 @@ const HeartFundCard = ({
         _poolWeight,
         pinePrice,
         Number(_lpPrice * (Number(masterchefLpBalance.result) / 1e18)),
-        Number(pinePerBlock.result) / 1e18
+        0 / 1e18
       ),
     });
 
@@ -460,6 +484,8 @@ const HeartFundCard = ({
 
     const _oneThousandDollarsWorthOfPine = 1000 / pinePrice;
     setOneThousandDollarsWorthOfPine(_oneThousandDollarsWorthOfPine);
+
+    setPcapPerStock(Number(_pcapPerStock.result));
   }
   function calculateReturnPerDolar(numberOfDays, farmApy, pinePrice) {
     // Everything here is worked out relative to a year, with the asset compounding daily
@@ -497,6 +523,7 @@ const HeartFundCard = ({
   useInterval(async () => {
     await getStats();
   }, 15000);
+
   async function approve() {
     try {
       const amount = lpBalance.mul(1e18).add(1);
@@ -537,11 +564,19 @@ const HeartFundCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "approve",
+        text: toLocaleString(lpBalance, 2, 2) + " " + farm.lpSymbol,
+        protocol: "heart fund",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
     }
   }
+
   async function approveStock() {
     try {
       const amount = stockBalance.mul(1e18).add(1);
@@ -576,11 +611,18 @@ const HeartFundCard = ({
           toast={toast}
           t={t}
           type={"confirmed"}
-          title={`STOCK Contract Approved`}
+          title={`STOCK Approved`}
           description={<></>}
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "approve",
+        text: toLocaleString(stockBalance, 2, 2) + " STOCK",
+        protocol: "heart fund",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
@@ -589,6 +631,8 @@ const HeartFundCard = ({
 
   async function harvest() {
     try {
+      const _estPcap = pendingPine;
+      const _estStock = pendingStock;
       toast.custom((t) => (
         <CustomToast
           toast={toast}
@@ -629,6 +673,13 @@ const HeartFundCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "claim rewards",
+        text: _estPcap + " PCAP" + " & " + _estStock + " STOCK",
+        protocol: "heart fund (" + farm.lpSymbol + ")",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
@@ -637,6 +688,12 @@ const HeartFundCard = ({
 
   async function stake() {
     try {
+      const _stakeAmount = toLocaleString(
+        new BigNumber(stakeInput),
+        2,
+        6,
+        0.01
+      );
       const _value = new BigNumber(stakeInput.toString())
         .mul(1e18)
         .toString()
@@ -681,13 +738,27 @@ const HeartFundCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "stake",
+        text: _stakeAmount + " " + farm.lpSymbol,
+        protocol: "heart fund",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
     }
   }
+
   async function unstakeLp() {
     try {
+      const _unstakeAmount = toLocaleString(
+        new BigNumber(unstakeInput),
+        2,
+        6,
+        0.01
+      );
       const _value = new BigNumber(unstakeInput.toString())
         .mul(1e18)
         .toString()
@@ -732,17 +803,17 @@ const HeartFundCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "unstake",
+        text: _unstakeAmount + " " + farm.lpSymbol,
+        protocol: "heart fund",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
     }
-  }
-  async function setMaxStakeInput() {
-    setStakeInput(lpBalance);
-  }
-
-  async function setMaxUnstakeInput() {
-    setUnstakeInput(stakedLpBalance);
   }
 
   function roundToTwoDp(number) {

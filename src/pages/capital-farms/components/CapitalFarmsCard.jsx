@@ -8,6 +8,8 @@ import usdc from "../../../assets/img/token/usdc.svg";
 import usdt from "../../../assets/img/token/usdt.svg";
 import weth from "../../../assets/img/token/weth.svg";
 
+import toast from "react-hot-toast";
+import CustomToast from "../../../components/CustomToast.jsx";
 import CustomModal from "../../../components/CustomModal";
 import Zapper from "../../../components/Zapper";
 import CustomSelectTwo from "../../../components/CustomSelectTwo";
@@ -23,11 +25,14 @@ import SelectModal from "../../../components/SelectModal";
 import BigNumber from "bignumber.js/bignumber";
 import useInterval from "../../../hooks/useInterval";
 import contracts from "../../../config/constants/contracts.js";
-import { multicall, writeContract, waitForTransaction } from "@wagmi/core";
+import {
+  multicall,
+  writeContract,
+  fetchBalance,
+  waitForTransaction,
+} from "@wagmi/core";
 import { useAccount } from "wagmi";
 import lpABI from "../../../config/abi/lpToken.json";
-import toast from "react-hot-toast";
-import CustomToast from "../../../components/CustomToast.jsx";
 
 function toLocaleString(num, min, max, cutout) {
   const _number = isNaN(Number(num)) ? 0 : Number(num);
@@ -41,6 +46,12 @@ function toLocaleString(num, min, max, cutout) {
       minimumFractionDigits: min,
       maximumFractionDigits: min,
     });
+}
+
+function addTransaction(address, transaction) {
+  const txs = JSON.parse(localStorage["warren-" + address]);
+  txs.push(transaction);
+  localStorage["warren-" + address] = JSON.stringify(txs);
 }
 
 BigNumber.config({
@@ -161,7 +172,7 @@ const CapitalFarmsCard = ({
   }
   async function getStats() {
     const query =
-      "0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee" + "," + farm.lpAddress;
+      "0x0000000000000000000000000000000000000000" + "," + farm.lpAddress;
     const response = await fetch(
       `https://api.dexscreener.com/latest/dex/pairs/pulsechain/${query}`
     );
@@ -169,8 +180,13 @@ const CapitalFarmsCard = ({
 
     const pinePrice = rsps.pairs?.filter(
       (pair) =>
-        pair.pairAddress === "0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee"
-    )[0]?.priceUsd;
+        pair.pairAddress === "0x0000000000000000000000000000000000000000"
+    )[0]
+      ? rsps.pairs.filter(
+          (pair) =>
+            pair.pairAddress === "0x0000000000000000000000000000000000000000"
+        )[0].priceUsd
+      : 0.001;
     const pairData = rsps.pairs?.filter(
       (pair) => pair.pairAddress === farm.lpAddress
     )[0];
@@ -426,6 +442,13 @@ const CapitalFarmsCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "approve",
+        text: toLocaleString(lpBalance, 2, 2) + " " + farm.lpSymbol,
+        protocol: "capital farms",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
@@ -434,6 +457,7 @@ const CapitalFarmsCard = ({
 
   async function harvest() {
     try {
+      const _estAmount = pendingPine;
       toast.custom((t) => (
         <CustomToast
           toast={toast}
@@ -474,6 +498,13 @@ const CapitalFarmsCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "claim rewards",
+        text: _estAmount + " PCAP",
+        protocol: "capital farms (" + farm.lpSymbol + ")",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
@@ -482,6 +513,13 @@ const CapitalFarmsCard = ({
 
   async function stake() {
     try {
+      //const _value = new BigNumber(stakeInput.toString()).mul(1e18).toString().split('.')[0]
+      const _stakeAmount = toLocaleString(
+        new BigNumber(stakeInput),
+        2,
+        6,
+        0.01
+      );
       const _value = new BigNumber(stakeInput.toString())
         .mul(1e18)
         .toString()
@@ -526,6 +564,13 @@ const CapitalFarmsCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "stake",
+        text: _stakeAmount + " " + farm.lpSymbol,
+        protocol: "capital farms",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);
@@ -534,6 +579,12 @@ const CapitalFarmsCard = ({
 
   async function unstake() {
     try {
+      const _unstakeAmount = toLocaleString(
+        new BigNumber(unstakeInput),
+        2,
+        6,
+        0.01
+      );
       const _value = new BigNumber(unstakeInput.toString())
         .mul(1e18)
         .toString()
@@ -578,6 +629,13 @@ const CapitalFarmsCard = ({
           hash={hash}
         />
       ));
+      addTransaction(userAccount.address, {
+        action: "unstake",
+        text: _unstakeAmount + " " + farm.lpSymbol,
+        protocol: "capital farms",
+        transaction: hash,
+        timestamp: Date.now(),
+      });
       getStats();
     } catch (error) {
       toast.custom((t) => <CustomToast toast={toast} t={t} type={"failed"} />);

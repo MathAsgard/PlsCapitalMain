@@ -2,7 +2,7 @@
 import { Option, Select } from "@material-tailwind/react";
 import React from "react";
 
-const CustomSelect = ({ options, setValue, value, label, className }) => {
+const CustomSelect = ({ options, setValue, value, label, className, dropDownFilter, filterType}) => {
 	return (
 		<>
 			<Select
@@ -10,7 +10,7 @@ const CustomSelect = ({ options, setValue, value, label, className }) => {
 				label={label ? label : "Select"}
 				className={`${className ? className : ""} custom-select`}
 				labelProps={{ className: value ? "hidden" : "" }}
-				onChange={(e) => setValue(e)}
+				onChange={(e) => { setValue(e); if(dropDownFilter) dropDownFilter(filterType, e);}}
 			>
 				{options?.map((item, index) => (
 					<Option key={index} value={item.value}>

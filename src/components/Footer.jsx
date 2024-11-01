@@ -134,7 +134,7 @@ const data = [
 			},
 			{
 				name: "Audits",
-				url: "#",
+				url: "https://github.com/0xGuard-com/audit-reports/blob/master/Pcap/Pcap.pdf",
 			},
 		],
 	},
@@ -143,15 +143,15 @@ const data = [
 		links: [
 			{
 				name: "Telegram",
-				url: "#",
+				url: "https://t.me/pulsecapitalportal",
 			},
 			{
 				name: "Twitter",
-				url: "#",
+				url: "https://x.com/PulseCapitalFi",
 			},
 			{
 				name: "Youtube",
-				url: "#",
+				url: "https://www.youtube.com/@moonshotmax3841",
 			},
 		],
 	},

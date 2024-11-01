@@ -1,9 +1,38 @@
 import "@material-tailwind/react";
-import React from "react";
+import React, { useRef, useEffect } from "react";
+import useInterval from "../../../hooks/useInterval";
 import CustomSelect from "../../../components/CustomSelect";
-const Transactions = () => {
-	const [value, setValue] = React.useState("");
-	const [value2, setValue2] = React.useState("");
+const Transactions = ({address}) => {
+	const [transactions, setTransactions] = React.useState([]);
+	const [protocolFilter, setProtocolFilter] = React.useState("");
+	const [transactionFilter, setTransactionFilter] = React.useState("");
+
+	function getTransactions(filterType, filterValue){
+		let txs = []
+		if(localStorage["warren-"+address]){
+			txs = JSON.parse(localStorage["warren-"+address]).reverse();
+			if(filterType == "protocol" && filterValue !== "Select Protocol") txs = txs.filter(tx=>tx.protocol.toLowerCase().includes(filterValue.toLowerCase()))
+			else if(protocolFilter !== "" && protocolFilter !== "Select Protocol") txs = txs.filter(tx=>tx.protocol.toLowerCase().includes(protocolFilter.toLowerCase()))
+			if(filterType == "transaction" && filterValue !== "Filter By") txs = txs.filter(tx=>tx.action.toLowerCase().includes(filterValue.toLowerCase()))
+			else if(transactionFilter !== "" && transactionFilter !== "Filter By") txs = txs.filter(tx=>tx.action.toLowerCase().includes(transactionFilter.toLowerCase()))
+		}
+    	setTransactions(txs)
+	}
+
+	function addTransaction(transaction){
+		const txs = JSON.parse(localStorage["warren-"+address]);
+		txs.push(transaction);
+    	localStorage["warren-"+address] = JSON.stringify(txs);
+	}
+
+	useEffect(() => {
+		getTransactions();
+	},[]);
+
+	useInterval(() => {
+		getTransactions();
+	}, 5000);
+
 	return (
 		<section className="relative z-[99] pt-[70px]">
 			<div className="noisy-bg top-[-100px]" />
@@ -17,10 +46,16 @@ const Transactions = () => {
 						<div className="flex flex-wrap gap-x-2 sm:gap-x-0 gap-y-2 items-center">
 							<div className="select-custom1">
 								<CustomSelect
-									value={value}
-									setValue={setValue}
+									value={protocolFilter}
+									setValue={setProtocolFilter}
 									label="Select Protocol"
+									dropDownFilter={getTransactions}
+									filterType={"protocol"}
 									options={[
+										{
+											value: "Select Protocol",
+											label: "Select Protocol",
+										},
 										{
 											value: "Capital Farms",
 											label: "Capital Farms",
@@ -30,12 +65,16 @@ const Transactions = () => {
 											label: "Heart Fund",
 										},
 										{
-											value: "STOCK Fund",
-											label: "STOCK Fund",
+											value: "STOCK Vault",
+											label: "STOCK Vault",
 										},
 										{
 											value: "Convert",
 											label: "Convert",
+										},
+										{
+											value: "Zapper",
+											label: "Zapper",
 										},
 									]}
 								/>
@@ -43,10 +82,16 @@ const Transactions = () => {
 							<span className="w-0 flex-grow bg-gradient8 h-[1px] min-w-7 sm:block hidden"></span>
 							<div className="select-custom2">
 								<CustomSelect
-									value={value2}
-									setValue={setValue2}
+									value={transactionFilter}
+									setValue={setTransactionFilter}
 									label="Filter By"
+									dropDownFilter={getTransactions}
+									filterType={"transaction"}
 									options={[
+										{
+											value: "Filter By",
+											label: "Filter By",
+										},
 										{
 											value: "Stake",
 											label: "Stake",
@@ -84,7 +129,7 @@ const Transactions = () => {
 								<thead>
 									<tr className="md:text-lg">
 										<th className="p-4 font-semibold text-nowrap">
-											Transaction
+											Action
 										</th>
 										<th className="p-4 font-semibold text-nowrap">
 											Token
@@ -104,37 +149,59 @@ const Transactions = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{data.map((item, index) => (
+									{transactions.map((tx, index) => (
 										<tr className="text-center" key={index}>
 											<td className="custom-table-td">
 												<div className="md:font-semibold text-nowrap">
-													<span className="text-gradient-2 mr-1">
-														{item.trxTypeGradient}
+													<span className="text-gradient-2 mr-1" style={{textTransform: "capitalize"}}>
+														{tx.action}
 													</span>
-													<span>{item.trxType}</span>
 												</div>
 											</td>
 											<td className="custom-table-td">
 												<div className="md:font-semibold text-nowrap">
-													<span>{item.token1}</span>
-													<span className="text-gradient-3 ml-1">
-														{item.token2}
+													{tx.text.includes('to') &&
+													<span style={{fontSize: "15px"}}>
+														<span className="text-gradient-2 mr-1">{tx.text.split('to')[0].match(/\b\d[\d,.]*\b/)}</span>
+														{tx.text.split('to')[0].match(/[a-zA-Z -]+/g)}
+														{tx.text.split('to')[1] ? 'to': ''}
+														<span className="text-gradient-2 mr-1">{tx.text.split('to')[1] ? tx.text.split('to')[1].match(/\b\d[\d,.]*\b/) : ""}</span>
+														{" "}{tx.text.split('to')[1] ? tx.text.split('to')[1].match(/[a-zA-Z -]+/g) : ""}
 													</span>
+													}
+													{tx.text.includes('&') &&
+													<span style={{fontSize: "15px"}}>
+														<span className="text-gradient-2 mr-1">{tx.text.split('&')[0].match(/\b\d[\d,.]*\b/)}</span>
+														{tx.text.split('&')[0].match(/[a-zA-Z -]+/g)}
+														{tx.text.split('&')[1] ? '& ': ''}
+														<span className="text-gradient-2 mr-1">{tx.text.split('&')[1] ? tx.text.split('&')[1].match(/\b\d[\d,.]*\b/) : ""}</span>
+														{" "}{tx.text.split('&')[1] ? tx.text.split('&')[1].match(/[a-zA-Z -]+/g) : ""}
+													</span>
+													}
+													{!tx.text.includes('to') && !tx.text.includes('&') &&
+													<span style={{fontSize: "15px"}}>
+														<span className="text-gradient-2 mr-1">{tx.text.split('to')[0].match(/\b\d[\d,.]*\b/)}</span>
+														{tx.text.split('to')[0].match(/[a-zA-Z -]+/g)}
+														{tx.text.split('to')[1] ? 'to ': ''}
+														<span className="text-gradient-2 mr-1">{tx.text.split('to')[1] ? tx.text.split('to')[1].match(/\b\d[\d,.]*\b/) : ""}</span>
+														{" "}{tx.text.split('to')[1] ? tx.text.split('to')[1].match(/[a-zA-Z -]+/g) : ""}
+													</span>
+													}
 												</div>
 											</td>
 											<td className="custom-table-td">
-												<span className="md:font-semibold text-nowrap">
-													{item.protocol}
+												<span className="md:font-semibold text-nowrap" style={{textTransform: "capitalize"}}>
+													{tx.protocol.split(" (")[0]} {tx.protocol.split(" (")[1] ? <span style={{textTransform: "none"}}>({tx.protocol.split(" (")[1]}</span> : ""}
 												</span>
 											</td>
 											<td className="custom-table-td">
 												<span className="md:font-semibold text-nowrap">
-													{item.transaction2}
+													<a href={'https://scan.pulsechain.com/tx/'+tx.transaction} target="about:blank">{tx.transaction.slice(0, 6)}...{tx.transaction.slice(tx.transaction.length - 6, tx.transaction.length)} 🔗</a>
 												</span>
 											</td>
 											<td className="custom-table-td">
 												<span className="md:font-semibold text-nowrap">
-													{item.time}
+													{new Date(tx.timestamp).toLocaleString('en-GB')}
 												</span>
 											</td>
 										</tr>
@@ -148,105 +215,5 @@ const Transactions = () => {
 		</section>
 	);
 };
-const data = [
-	{
-		trxType: "Stake",
-		trxTypeGradient: "",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Capital Farms",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "Claim",
-		trxTypeGradient: "",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Heart Fund",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "Rewards",
-		trxTypeGradient: "Claim ",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "STOCK Lock",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "",
-		trxTypeGradient: "Unstake",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Heart Fund",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "",
-		trxTypeGradient: "Convert",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Convert",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "Stake",
-		trxTypeGradient: "",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Capital Farms",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "Claim",
-		trxTypeGradient: "",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Heart Fund",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "Rewards",
-		trxTypeGradient: "Claim ",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "STOCK Lock",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "",
-		trxTypeGradient: "Unstake",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Heart Fund",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "",
-		trxTypeGradient: "Convert",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "Convert",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-	{
-		trxType: "Rewards",
-		trxTypeGradient: "Claim ",
-		token1: "2499.67",
-		token2: "ETH-WPLS LP",
-		protocol: "STOCK Lock",
-		transaction2: "0x55bbe...a2d6ac10",
-		time: "Mar 12, 2024, 03:27pm",
-	},
-];
+
 export default Transactions;

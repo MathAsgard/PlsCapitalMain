@@ -16,20 +16,17 @@ const PageHeader = ({ title, subtitle, text, miniFav, ...rest}) => {
 						<div className="text-center">
 							<div className="mb-4">
 								<PresaleCountdown
-									targetDate={`November 1, 2024 00:00:00`}
+									targetDate={1730851200000}
 								/>
 							</div>
 							<h1 className="text-2xl md:text-3xl lg:text-[40px] font-semibold">
-								Ambassador Pre-Launch
+								We are live
 							</h1>
 							<p className="font-medium text-white text-opacity-50 mt-1 mb-[18px]">
 								Gain a competitive edge by participating in pre-launch
 							</p>
 							<div className="font-medium max-w-[759px] mx-auto md:text-md lg:text-lg px-6 md:px-0 text-gradient-4">
-								Access exclusive investment opportunities and
-								early-stage projects with our Presale Platform. Join the
-								journey of innovation and growth in the decentralized
-								finance space.
+								Ambassador Pre-Launch will end once timer hits 0 at (November 6th 12am EST ) .
 							</div>
 						</div>
 						<img

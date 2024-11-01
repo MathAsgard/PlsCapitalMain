@@ -20,21 +20,20 @@ import {
   waitForTransaction,
 } from "@wagmi/core";
 import { useAccount } from "wagmi";
-import toast from "react-hot-toast";
-import CustomToast from "../../components/CustomToast.jsx";
 
 function toLocaleString(num, min, max, cutout) {
   const _number = isNaN(Number(num)) ? 0 : Number(num);
-  if (cutout && num > 0 && num < cutout)
+  if (cutout && num > 0 && num < cutout) {
     return _number.toLocaleString(undefined, {
       minimumFractionDigits: max,
       maximumFractionDigits: max,
     });
-  else
+  } else {
     return _number.toLocaleString(undefined, {
       minimumFractionDigits: min,
       maximumFractionDigits: min,
     });
+  }
 }
 
 function milStr(num) {
@@ -83,6 +82,7 @@ const Dashboard = () => {
         allLPs.push(e.lpAddress);
       }
     });
+
     rhFarms.forEach((e) => {
       if (!hash[e.lpAddress]) {
         hash[e.lpAddress] = true;
@@ -95,6 +95,7 @@ const Dashboard = () => {
         ","
       )}`
     );
+
     const response = await request.json();
 
     const supplyCall = allLPs.map((e) => {
@@ -141,6 +142,7 @@ const Dashboard = () => {
         args: [farm.plsxPid, contracts.masterChefRh.address],
       };
     });
+    console.log(balanceCallFarms);
     const [
       supply,
       balanceFarms,
@@ -158,9 +160,9 @@ const Dashboard = () => {
     allLPs.forEach((lpAddress, index) => {
       hash["allLPs"] = allLPs;
       hash[lpAddress] = [];
-      hash[lpAddress]["liquidity"] = response.pairs?.filter(
-        (pair) => pair?.pairAddress === lpAddress
-      )[0]?.liquidity.usd;
+      hash[lpAddress]["liquidity"] = response.pairs.filter(
+        (pair) => pair.pairAddress === lpAddress
+      )[0].liquidity.usd;
       hash[lpAddress]["supply"] = Number(supply[index].result) / 1e18;
       hash[lpAddress]["price"] =
         hash[lpAddress]["liquidity"] / hash[lpAddress]["supply"];
@@ -195,6 +197,7 @@ const Dashboard = () => {
 
     return hash;
   }
+
   async function getFarmsData(lpData) {
     const stakedCall = farms.map((farm) => {
       return {
@@ -231,6 +234,7 @@ const Dashboard = () => {
         args: [farm.pid, userAccount.address],
       };
     });
+
     const [stakedFarms, rewardsFarms, stakedRh, rewardsRh, stockRewardsRh] =
       await Promise.all([
         multicall({ contracts: stakedCall }),
@@ -239,6 +243,7 @@ const Dashboard = () => {
         multicall({ contracts: rewardsRhCall }),
         multicall({ contracts: stockRewardsRhCall }),
       ]);
+
     const _farmsData = [];
     _farmsData["farms"] = [];
     _farmsData["rhFarms"] = [];
@@ -266,6 +271,7 @@ const Dashboard = () => {
           (Number(rewardsFarms[index].result) / 1e18) * pcapPrice;
       }
     });
+
     rhFarms.forEach((farm, index) => {
       if (index === 0) {
         _farmsData["rhFarms"]["staked"] =
@@ -313,6 +319,7 @@ const Dashboard = () => {
       `https://api.dexscreener.com/latest/dex/pairs/pulsechain/0xe56043671df55de5cdf8459710433c10324de0ae`
     );
     const rsps = await response.json();
+    console.log(rsps);
     return rsps.pairs[0].priceUsd;
   }
 
@@ -322,14 +329,21 @@ const Dashboard = () => {
       address: userAccount.address,
     });
     const response = await fetch(
-      `https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee`
+      `https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x0000000000000000000000000000000000000000`
     );
     const rsps = await response.json();
     const _plsPrice = await getPlsPrice();
-    const pinePrice = rsps.pairs?.filter(
-      (pair) =>
-        pair.pairAddress === "0x554dcc3dFD807ef343855837A404bF4dF6D8C7Ee"
-    )[0].priceUsd;
+    const pinePrice =
+      rsps.pairs &&
+      rsps.pairs.filter(
+        (pair) =>
+          pair.pairAddress === "0x0000000000000000000000000000000000000000"
+      )[0]
+        ? rsps.pairs.filter(
+            (pair) =>
+              pair.pairAddress === "0x0000000000000000000000000000000000000000"
+          )[0].priceUsd
+        : 0.001;
     const [
       _stockSupply,
       _stockInPool,
@@ -421,11 +435,9 @@ const Dashboard = () => {
     setPcapBalance(Number(_pcapBalance.result) / 1e18);
     setPlsPrice(_plsPrice);
     setPcapPrice(pinePrice);
-
     farmsData = await getFarmsData(lpData);
     setStockStaked(Number(_stockStaked.result[2]) / 1e18);
     setStockDividends(Number(_stockDividends.result) / 1e18);
-
     setUserLocks(
       _userLocks.result
         .filter((lock) => {
@@ -447,11 +459,6 @@ const Dashboard = () => {
 
   const cardsData = [
     {
-      title: "Stock Liquidity",
-      amount: "$" + milStr(stockTVL),
-      subtitle: "Warren Protocol",
-    },
-    {
       title: "Capital Farms TVL",
       amount: "$" + milStr(farmsTVL),
       subtitle: "Total Value Locked",
@@ -462,7 +469,7 @@ const Dashboard = () => {
       subtitle: "Total Value Locked",
     },
     {
-      title: "Stock Pool TVL",
+      title: "STOCK Vault TVL",
       amount: "$" + milStr(stockPoolTVL),
       subtitle: "Total Value Locked",
     },
@@ -470,6 +477,11 @@ const Dashboard = () => {
       title: "STOCK Market Cap",
       amount: "$" + milStr(stockTVL),
       subtitle: "Total Valuation",
+    },
+    {
+      title: "STOCK Liquidity",
+      amount: "$" + milStr(stockTVL),
+      subtitle: "Total Liquidity",
     },
   ];
 
@@ -496,7 +508,7 @@ const Dashboard = () => {
           stockDividends={stockDividends}
           stockLockUSD={userLocks * stockPrice}
         />
-        <Transactions />
+        <Transactions address={userAccount.address} />
         <Faqs />
       </Layout>
     </>

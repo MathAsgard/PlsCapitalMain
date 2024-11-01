@@ -2,7 +2,21 @@ import React from "react";
 import CountdownCard from "../../../components/CountdownCard";
 import SectionHeader from "../../../components/SectionHeader";
 
-const ClaimTokens = () => {
+function toLocaleString(num, min, max, cutout) {
+	const _number = isNaN(Number(num)) ? 0 : Number(num);
+	if (cutout && num > 0 && num < cutout)
+	  return _number.toLocaleString(undefined, {
+		minimumFractionDigits: max,
+		maximumFractionDigits: max,
+	  });
+	else
+	  return _number.toLocaleString(undefined, {
+		minimumFractionDigits: min,
+		maximumFractionDigits: min,
+	  });
+}
+
+const ClaimTokens = ({presaleEnded, rewards, stockPrice, pcapPrice, claim, claimed}) => {
 	return (
 		<section className="pt-[74px] md:pb-[80px]">
 			{/* <div className="container mx-auto">
@@ -115,7 +129,7 @@ const ClaimTokens = () => {
 					title="Claim Tokens"
 					subtitle="Your Rewards will appear here once the presale ends"
 				/>
-				<div className="asset-card h-full max-w-[508px] mx-auto bg-gradient-dark" style={{filter: "blur(6px)"}}>
+				<div className="asset-card h-full max-w-[508px] mx-auto bg-gradient-dark" style={!presaleEnded ? {filter: "blur(6px)"} : {}}>
 					<div className="inner">
 						<div
 							className="py-6 md:pt-[39px] md:pb-[37px] px-4 sm:px-6 xl:px-[44px]"
@@ -140,28 +154,12 @@ const ClaimTokens = () => {
 											</h6>
 											<div className="bg-tableBg shadow-innerShadow rounded-[5px]">
 												<h2 className="text-lg md:text-[22px] font-semibold pt-3 pb-2">
-													243,485.57
+													{toLocaleString(Number(rewards[0])/1e18, 2, 2)}
 												</h2>
 												<p className="text-sm pb-[2px] border-t border-white border-opacity-20 text-white text-opacity-50">
-													$2,000
+													${toLocaleString(Number(rewards[0])/1e18*pcapPrice, 2, 2)}
 												</p>
 											</div>
-										</div>
-									</div>
-									<div className="relative z-10 mt-5">
-										<button
-											type="button"
-											className="btn-3 w-full h-[44px] text-normal sm:font-bold text-[#1F1E19]"
-										>
-											Claim Tokens
-										</button>
-										<div className="mt-[11px] text-sm flex items-center gap-1 justify-center text-white text-opacity-50">
-											Claim in{" "}
-											<CountdownCard
-												targetDate={`October 30, 2050 00:00:00`}
-												showDays={true}
-												shortend={true}
-											/>
 										</div>
 									</div>
 								</div>
@@ -178,31 +176,36 @@ const ClaimTokens = () => {
 											</h6>
 											<div className="bg-tableBg shadow-innerShadow rounded-[5px]">
 												<h2 className="text-lg md:text-[22px] font-semibold pt-3 pb-2">
-													243,485.57
+													{toLocaleString(Number(rewards[1])/1e18, 2, 2)}
 												</h2>
 												<p className="text-sm pb-[2px] border-t border-white border-opacity-20 text-white text-opacity-50">
-													$100,000
+													${toLocaleString(Number(rewards[1])/1e18*stockPrice, 2, 2)}
 												</p>
 											</div>
 										</div>
 									</div>
-									<div className="relative z-10 mt-5">
-										<button
-											type="button"
-											className="btn-3 w-full h-[44px] text-normal sm:font-bold text-[#1F1E19]"
-											disabled
-										>
-											Claim Tokens
-										</button>
-										<div className="mt-[11px] text-sm flex items-center gap-1 justify-center text-white text-opacity-50">
-											Claim in{" "}
-											<CountdownCard
-												targetDate={`October 30, 2050 00:00:00`}
-											/>
-										</div>
-									</div>
 								</div>
 							</div>
+							{claimed === false ?
+								<div className="relative z-10 mt-5">
+									<button
+										type="button"
+										className="btn-3 w-full h-[44px] text-normal sm:font-bold text-[#1F1E19]"
+										onClick={claim}
+									>
+										Claim Tokens
+									</button>
+								</div> :
+								<div className="relative z-10 mt-5">
+									<button
+										type="button"
+										className="btn-3 w-full h-[44px] text-normal sm:font-bold text-[#1F1E19]"
+										disabled
+									>
+										Rewards already claimed
+									</button>
+								</div>
+							}
 						</div>
 					</div>
 				</div>

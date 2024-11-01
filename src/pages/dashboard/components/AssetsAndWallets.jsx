@@ -106,7 +106,7 @@ const AssetsAndWallets = ({...args}) => {
 											</div>
 											<div className="">
 												<div className="text-white text-opacity-50 mb-[5px] text-center">
-													STOCk Vault
+													STOCK Vault
 												</div>
 												<div className="asset-card mb-[14px]">
 													<div className="rounded-[10px] bg-[#140236] text-center h-full">
@@ -123,7 +123,7 @@ const AssetsAndWallets = ({...args}) => {
 													className="btn-3 w-full"
 													onClick={()=>window.location="/stock-vault"}
 												>
-													Harvest Market
+													Harvest Vault
 												</button>
 											</div>
 										</div>
@@ -215,7 +215,7 @@ const AssetsAndWallets = ({...args}) => {
 												: "0.00"}
 											</div>
 											<div className="text-sm sm:text-normal text-white text-opacity-30 border-t border-white border-opacity-20 py-1 px-3">
-												My Total Assets Staked
+												Total Assets Staked
 											</div>
 										</div>
 									</div>
@@ -225,7 +225,7 @@ const AssetsAndWallets = ({...args}) => {
 												${args.farmsData["farms"] && args.farmsData["farms"]["stakedUSD"] ? milStr(args.farmsData["farms"]["stakedUSD"]) : "0.00"}
 											</div>
 											<div className="text-sm sm:text-normal text-white text-opacity-30 border-t border-white border-opacity-20 py-1 px-3">
-												My Total Assets in Capital Farms
+												Total Assets in Capital Farms
 											</div>
 										</div>
 									</div>

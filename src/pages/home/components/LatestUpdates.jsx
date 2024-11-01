@@ -28,7 +28,7 @@ const LatestUpdates = () => {
 					</ScrollAnimation>
 				</div>
 				<div className="relative">
-					<button
+					{/* <button
 						className="absolute top-1/2 translate-y-[-50%] left-[-70px] hidden lg:block translate-x-[100px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 duration-300 transition-all"
 						type="button"
 						onClick={() => prevSlide()}
@@ -41,7 +41,7 @@ const LatestUpdates = () => {
 						onClick={() => nextSlide()}
 					>
 						<AngleRight />
-					</button>
+					</button> */}
 					<ScrollAnimation animateIn="fadeInUp" animateOnce={true}>
 						<Swiper
 							loop={true}
@@ -88,7 +88,7 @@ const LatestUpdates = () => {
 												<span>{item.title2}</span>
 											</h5>
 											<p className="line-clamp-4 text-white text-opacity-60 leading:[19px]">
-												{item.text}
+												{item.description}
 											</p>
 										</div>
 									</div>
@@ -135,37 +135,22 @@ const data = [
 		img: "/img/latest-updates/1.png",
 		title1: "The Rebrand: ",
 		title2: "Warren to Pulse Capital",
-		text: "The Pools on the Capital Farms will receive an additional 15% yield increase from rehypothecation rewards for a week. This is to incentivize more users to get into the farms prior to Bitcoin Halving. With the transition from Warren to Pulse Capital, our platform undergoes a transformation aimed at aligning with the ethos of the PulseChain ecosystem. This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation, security, and community engagement, ensuring that users continue to benefit from a robust and user-friendly platform that empowers their financial journey in the decentralized world.",
+		description: "This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation...",
+		text: "This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation, security, and community engagement, ensuring that users continue to benefit from a robust and user-friendly platform that empowers their financial journey in the decentralized world.",
 	},
 	{
 		img: "/img/latest-updates/2.png",
 		title1: "Capital Farms Yield: ",
 		title2: "25% Reward Boost",
-		text: "The Pools on the Capital Farms will receive an additional 15% yield increase from rehypothecation rewards for a week. This is to incentivize more users to get into the farms prior to Bitcoin Halving. With the transition from Warren to Pulse Capital, our platform undergoes a transformation aimed at aligning with the ethos of the PulseChain ecosystem. This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation, security, and community engagement, ensuring that users continue to benefit from a robust and user-friendly platform that empowers their financial journey in the decentralized world.",
+		description: "With our commitment to maximizing user rewards, Pulse Capital introduces a 25% APR boost in the Capital Farms. This enhancement allows users to earn substantially higher yields, with APRs set at...",
+		text: "With our commitment to maximizing user rewards, Pulse Capital introduces a 25% APR boost in the Capital Farms. This enhancement allows users to earn substantially higher yields, with APRs set at 125% of those offered on PulseX. By staking LP tokens in our Capital Farms, users can capitalize on this boost, enjoying increased earnings without additional risk. This adjustment reflects our dedication to providing competitive and rewarding DeFi solutions, aligning with our mission to empower users with robust, high-yield opportunities in the PulseChain ecosystem.",
 	},
 	{
 		img: "/img/latest-updates/3.png",
 		title1: "Heart Fund: ",
 		title2: "50% Yield Boost",
-		text: "The Pools on the Capital Farms will receive an additional 15% yield increase from rehypothecation rewards for a week. This is to incentivize more users to get into the farms prior to Bitcoin Halving. With the transition from Warren to Pulse Capital, our platform undergoes a transformation aimed at aligning with the ethos of the PulseChain ecosystem. This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation, security, and community engagement, ensuring that users continue to benefit from a robust and user-friendly platform that empowers their financial journey in the decentralized world.",
-	},
-	{
-		img: "/img/latest-updates/1.png",
-		title1: "The Rebrand: ",
-		title2: "Warren to Pulse Capital",
-		text: "The Pools on the Capital Farms will receive an additional 15% yield increase from rehypothecation rewards for a week. This is to incentivize more users to get into the farms prior to Bitcoin Halving. With the transition from Warren to Pulse Capital, our platform undergoes a transformation aimed at aligning with the ethos of the PulseChain ecosystem. This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation, security, and community engagement, ensuring that users continue to benefit from a robust and user-friendly platform that empowers their financial journey in the decentralized world.",
-	},
-	{
-		img: "/img/latest-updates/2.png",
-		title1: "Capital Farms Yield: ",
-		title2: "25% Reward Boost",
-		text: "The Pools on the Capital Farms will receive an additional 15% yield increase from rehypothecation rewards for a week. This is to incentivize more users to get into the farms prior to Bitcoin Halving. With the transition from Warren to Pulse Capital, our platform undergoes a transformation aimed at aligning with the ethos of the PulseChain ecosystem. This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation, security, and community engagement, ensuring that users continue to benefit from a robust and user-friendly platform that empowers their financial journey in the decentralized world.",
-	},
-	{
-		img: "/img/latest-updates/3.png",
-		title1: "Heart Fund: ",
-		title2: "50% Yield Boost",
-		text: "The Pools on the Capital Farms will receive an additional 15% yield increase from rehypothecation rewards for a week. This is to incentivize more users to get into the farms prior to Bitcoin Halving. With the transition from Warren to Pulse Capital, our platform undergoes a transformation aimed at aligning with the ethos of the PulseChain ecosystem. This rebranding signifies our dedication to providing users with cutting-edge DeFi solutions tailored to the unique features of PulseChain. Pulse Capital embodies our renewed focus on innovation, security, and community engagement, ensuring that users continue to benefit from a robust and user-friendly platform that empowers their financial journey in the decentralized world.",
+		description: "Heart Fund offers an exclusive 50% APR boost on staking rewards, providing users with APRs set at 150% of those on PulseX. By staking a balanced combination of LP and STOCK tokens, users gain...",
+		text: "Heart Fund offers an exclusive 50% APR boost on staking rewards, providing users with APRs set at 150% of those on PulseX. By staking a balanced combination of LP and STOCK tokens, users gain access to this elevated reward structure, optimizing their earning potential ecosystem. This enhanced APR reflects our commitment to delivering premium DeFi opportunities that align with our vision of sustainable, high-yield returns. The Heart Fund is crafted to empower our community with robust, incentivized staking that supports platform stability.",
 	},
 ];
 export default LatestUpdates;

@@ -78,7 +78,7 @@ const data = [
 	},
 	{
 		title: "Ambassadors",
-		amount: "14",
+		amount: "15",
 		subtitle: "Total Ambassadors",
 		img: "/img/ambassador-card-bg-1.png",
 		muted: true,
